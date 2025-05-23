@@ -153,7 +153,41 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
       return dma;
     }else{
       //verifique se a data final não é menor que a data inicial
-      
+	int ano, mes, dia;
+	int anoF, mesF, diaF;
+
+
+    sscanf(datainicial, "%d/%d/%d", &dia, &mes, &ano);
+    
+    sscanf(datafinal, "%d/%d/%d", &diaF, &mesF, &anoF);
+    
+    
+    int meses[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+
+    if((anoF % 4 == 0 && anoF % 100 != 0) || (anoF % 400 == 0))
+        meses[1] = 29;
+
+
+    if(diaF < dia) {
+        diaF += meses[(mesF - 2 + 12) % 12];
+        mesF--;
+    }
+
+    if(mesF < mes) {
+        mesF += 12;
+        anoF--;
+    }
+
+    dma.qtdDias = diaF - dia;
+    dma.qtdMes = mesF - mes;
+    dma.qtdAnos = anoF - ano;
+    
+    if((qtdMes == 11) && (qtdDias == 30)){
+    	dma.qtdAnos = 1;
+    	dma.qtdMes = 0;
+    	dma.qtdDias = 0;
+    }
+
       //calcule a distancia entre as datas
 
 
