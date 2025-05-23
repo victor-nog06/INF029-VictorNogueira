@@ -95,7 +95,25 @@ int q1(char data[])
   int datavalida = 1;
 
   //quebrar a string data em strings sDia, sMes, sAno
+	int ano, mes, dia;
+    	int meses[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+    
+    
+    	sscanf(data, "%d/%d/%d", &dia, &mes, &ano);
 
+    	if(dia < 1 && dia > 31)
+    		datavalida = 0;
+    
+    	if(mes < 1 && mes > 12)
+    		datavalida = 0;
+    
+    
+    
+    	if((ano % 4 == 0) && (ano % 100 != 0) || (ano % 400 == 0))
+    		meses[1] = 29;
+    
+    	if(dia > meses[mes - 1])
+    		datavalida = 0;
 
   //printf("%s\n", data);
 
