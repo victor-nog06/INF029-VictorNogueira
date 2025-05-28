@@ -24,6 +24,8 @@
 #include <stdio.h>
 #include "VictorNogueira20242160005.h" // Substitua pelo seu arquivo de header renomeado
 #include <stdlib.h>
+#include <string.h>
+
 
 DataQuebrada quebraData(char data[]);
 
@@ -95,7 +97,7 @@ int q1(char data[])
   int datavalida = 1;
 
   //quebrar a string data em strings sDia, sMes, sAno
-	char sAno, sMes, sDia;
+	char sAno[5], sMes[3], sDia[3];
 	int ano, mes, dia;
     	int meses[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
     
@@ -463,7 +465,7 @@ int q6(int numerobase, int numerobusca)
 
 DataQuebrada quebraData(char data[]){
   DataQuebrada dq;
-  char sDia[3];
+  	char sDia[3];
 	char sMes[3];
 	char sAno[5];
 	int i; 
