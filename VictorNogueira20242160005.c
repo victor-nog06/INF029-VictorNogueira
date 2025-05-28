@@ -95,19 +95,63 @@ int q1(char data[])
   int datavalida = 1;
 
   //quebrar a string data em strings sDia, sMes, sAno
+	char sAno, sMes, sDia;
 	int ano, mes, dia;
     	int meses[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
     
     
-    	sscanf(data, "%d/%d/%d", &dia, &mes, &ano);
+    	for( int i = 0; i != '/'; i++){
+		sDia[i] = sData [i];
+	} 
 
-    	if(dia < 1 && dia > 31)
+	if(i == 1 || i == 2){
+		sDia[i] = '\0'; 
+	} 
+	else {
+		datavalida = 0; 
+	}
+
+	int j = i + 1;
+	i = 0;
+
+	for (; data[j] != '/'; j++){
+		sMes[i] = data[j];
+		i++;
+	}
+
+	if(i == 1 || i == 2){ 
+		sMes[i] = '\0';
+	}
+	else
+		datavalida = 0;
+  
+	
+
+	j = j + 1;
+	i = 0;
+	
+	for(; data[j] != '\0'; j++){
+	 	sAno[i] = data[j];
+	 	i++;
+	}
+
+	if(i == 2 || i == 4){ 
+		sAno[i] = '\0';
+	}
+	else 
+		datavalida = 0;
+	
+	dia = atoi(sDia);
+	mes = atoi(sMes);
+	ano = atoi(sAno); 
+
+	
+    	if(dia < 1 || dia > 31)
     		datavalida = 0;
     
-    	if(mes < 1 && mes > 12)
+    	if(mes < 1 || mes > 12)
     		datavalida = 0;
-    
-    
+
     
     	if((ano % 4 == 0) && (ano % 100 != 0) || (ano % 400 == 0))
     		meses[1] = 29;
@@ -213,6 +257,53 @@ int q3(char *texto, char c, int isCaseSensitive)
 {
     int qtdOcorrencias = -1;
 
+	char remover_acento(unsigned char c) {
+    switch (c) {
+        case 225: case 224: case 226: case 227:  
+        case 193: case 192: case 194: case 195:  
+            return 'a';
+        case 233: case 232: case 234: 
+        case 201: case 200: case 202: 
+            return 'e';
+        case 237: case 236: case 238:  
+        case 205: case 204: case 206: 
+            return 'i';
+        case 243: case 242: case 244: case 245: 
+        case 211: case 210: case 212: case 213: 
+            return 'o';
+        case 250: case 249:
+        case 218: case 217:  
+            return 'u';
+        
+        default:
+            return c;
+    }
+}
+
+char to_lower(char c) {
+    if (c >= 'A' && c <= 'Z')
+        return c + 32;
+    return c;
+}
+    
+    char caractere_texto, caractere_buscado;
+    int cont;
+	
+	for (cont = 0; texto[cont] != '\0'; cont++) {
+        caractere_texto = remover_acento((unsigned char)texto[cont]);
+        caractere_buscado = remover_acento((unsigned char)c);
+
+        if (isCaseSensitive == 0) {
+            caractere_texto = to_lower(caractere_texto);
+            caractere_buscado = to_lower(caractere_buscado);
+        }
+
+        if (caractere_texto == caractere_buscado) {
+            qtdOcorrencias++;
+        }
+    }
+
+
     return qtdOcorrencias;
 }
 
@@ -233,7 +324,27 @@ int q3(char *texto, char c, int isCaseSensitive)
  */
 int q4(char *strTexto, char *strBusca, int posicoes[30])
 {
-    int qtdOcorrencias = -1;
+    int tam_texto = strlen(strTexto);
+    int tam_busca = strlen(strBusca);
+    int i = 0, j, k = 0;
+    int qtdOcorrencias = 0;
+
+    while (i <= tam_texto - tam_busca) {
+        for (j = 0; j < tam_busca; j++) {
+            if (strTexto[i + j] != strBusca[j]) {
+                break;
+            }
+        }
+
+        if (j == tam_busca) {
+            posicoes[k] = i + 1;                   
+            posicoes[k + 1] = i + tam_busca;
+            qtdOcorrencias++;
+            i += tam_busca;
+        } else {
+            i++;
+        }
+    }
 
     return qtdOcorrencias;
 }
@@ -249,9 +360,17 @@ int q4(char *strTexto, char *strBusca, int posicoes[30])
  */
 
 int q5(int num)
-{
+{ 
+    int digito, invertido;
+	
+    while (num != 0) {
+        digito = num % 10;
+        invertido = invertido * 10 + digito;
+        num /= 10;
+    }
 
-    return num;
+
+    return invertido;
 }
 
 /*
@@ -267,6 +386,31 @@ int q5(int num)
 int q6(int numerobase, int numerobusca)
 {
     int qtdOcorrencias;
+    char strBase[50], strBusca[20];
+
+    
+    sprintf(strBase, "%d", numerobase);
+    sprintf(strBusca, "%d", numerobusca);
+
+    int tam_numbase = strlen(strBase);
+    int tam_numbusca = strlen(strBusca);
+
+    for (int i = 0; i <= tam_numbase - tam_numbusca;) {
+    	int igual = 1;
+    	for (int j = 0; j < tam_numbusca; j++) {
+        	if (strBase[i + j] != strBusca[j]) {
+            	igual = 0;
+            	break;
+        }
+    }
+    if (igual) {
+        qtdOcorrencias++;
+        i += tam_numbusca;
+    } else {
+        i++;
+    }
+}
+
     return qtdOcorrencias;
 }
 
@@ -282,7 +426,36 @@ int q6(int numerobase, int numerobusca)
 
  int q7(char matriz[8][10], char palavra[5])
  {
-     int achou;
+     	int achou;
+	int dx[8] = {-1, -1, -1,  0, 0, 1, 1, 1};
+	int dy[8] = {-1,  0,  1, -1, 1, -1, 0, 1};
+
+	int buscaDirecao(char matriz[8][10], int i, int j, char palavra[5], int dir) {
+    		int len = strlen(palavra);
+
+    		for (int k = 0; k < len; k++) {
+        		int ni = i + k * dx[dir];
+        		int nj = j + k * dy[dir];
+
+       		if (ni < 0 || nj < 0 || ni >= 8 || nj >= 10)
+            		return 0;
+
+        	if (matriz[ni][nj] != palavra[k])
+            		return 0;
+    }
+    	return 1;
+}
+	for (int i = 0; i < 8 && !achou; i++) {
+        for (int j = 0; j < 10 && !achou; j++) {
+            for (int dir = 0; dir < 8; dir++) {
+                if (buscaDirecao(matriz, i, j, palavra, dir)) {
+                    achou = 1;
+                    break;
+                }
+            }
+        }
+    }
+
      return achou;
  }
 
