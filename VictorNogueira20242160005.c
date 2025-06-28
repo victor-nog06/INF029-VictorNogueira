@@ -98,12 +98,12 @@ int q1(char data[])
 
   //quebrar a string data em strings sDia, sMes, sAno
 	char sAno[5], sMes[3], sDia[3];
-	int ano, mes, dia;
+	int ano, mes, dia, i;
     	int meses[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
     
     
     	for( int i = 0; i != '/'; i++){
-		sDia[i] = sData [i];
+		sDia[i] = data [i];
 	} 
 
 	if(i == 1 || i == 2){
@@ -225,12 +225,13 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
     }
 
     dma.qtdDias = diaF - dia;
-    dma.qtdMes = mesF - mes;
+    dma.qtdMeses = mesF - mes;
     dma.qtdAnos = anoF - ano;
     
-    if((qtdMes == 11) && (qtdDias == 30)){
+    if((dma.qtdMeses == 11) && (dma.
+        qtdDias == 30)){
     	dma.qtdAnos = 1;
-    	dma.qtdMes = 0;
+    	dma.qtdMeses = 0;
     	dma.qtdDias = 0;
     }
 
