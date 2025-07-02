@@ -22,7 +22,7 @@
 // #################################################
 
 #include <stdio.h>
-#include "VictorNogueira20242160005.h" // Substitua pelo seu arquivo de header renomeado
+#include "T1.h" // Substitua pelo seu arquivo de header renomeado
 #include <stdlib.h>
 #include <string.h>
 
@@ -155,8 +155,8 @@ int q1(char data[])
     		datavalida = 0;
 
     
-    	if((ano % 4 == 0) && (ano % 100 != 0) || (ano % 400 == 0))
-    		meses[1] = 29;
+        if((((ano % 4 == 0) && (ano % 100 != 0))) || (ano % 400 == 0))
+            meses[1] = 29;
     
     	if(dia > meses[mes - 1])
     		datavalida = 0;
@@ -256,11 +256,14 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
  @saida
     Um número n >= 0.
  */
-int q3(char *texto, char c, int isCaseSensitive)
-{
-    int qtdOcorrencias = -1;
 
-	char remover_acento(unsigned char c) {
+ char to_lower(char c) {
+    if (c >= 'A' && c <= 'Z')
+        return c + 32;
+    return c;
+}
+
+char remover_acento(unsigned char c) {
     switch (c) {
         case 225: case 224: case 226: case 227:  
         case 193: case 192: case 194: case 195:  
@@ -282,13 +285,10 @@ int q3(char *texto, char c, int isCaseSensitive)
             return c;
     }
 }
-
-char to_lower(char c) {
-    if (c >= 'A' && c <= 'Z')
-        return c + 32;
-    return c;
-}
     
+
+int q3(char *texto, char c, int isCaseSensitive){
+    int qtdOcorrencias = -1;
     char caractere_texto, caractere_buscado;
     int cont;
 	
@@ -427,14 +427,10 @@ int q6(int numerobase, int numerobusca)
     1 se achou 0 se não achou
  */
 
- int q7(char matriz[8][10], char palavra[5])
- {
-     	int achou = 0;
-	int dx[8] = {-1, -1, -1,  0, 0, 1, 1, 1};
-	int dy[8] = {-1,  0,  1, -1, 1, -1, 0, 1};
-
-	int buscaDirecao(char matriz[8][10], int i, int j, char palavra[5], int dir) {
-    		int len = strlen(palavra);
+ int buscaDirecao(char matriz[8][10], int i, int j, char palavra[5], int dir){
+    	int len = strlen(palavra);
+        int dx[8] = {-1, -1, -1,  0, 0, 1, 1, 1};
+	    int dy[8] = {-1,  0,  1, -1, 1, -1, 0, 1};
 
     		for (int k = 0; k < len; k++) {
         		int ni = i + k * dx[dir];
@@ -448,6 +444,11 @@ int q6(int numerobase, int numerobusca)
     }
     	return 1;
 }
+
+ int q7(char matriz[8][10], char palavra[5])
+ {
+     	int achou = 0;
+
 	for (int i = 0; i < 8 && !achou; i++) {
         for (int j = 0; j < 10 && !achou; j++) {
             for (int dir = 0; dir < 8; dir++) {
