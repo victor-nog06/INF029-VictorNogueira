@@ -98,7 +98,7 @@ int q1(char data[])
 
   //quebrar a string data em strings sDia, sMes, sAno
 	char sAno[5], sMes[3], sDia[3];
-	int ano, mes, dia, i;
+	int ano, mes, dia, i = 0;
     	int meses[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
     
     
@@ -364,7 +364,7 @@ int q4(char *strTexto, char *strBusca, int posicoes[30])
 
 int q5(int num)
 { 
-    int digito, invertido;
+    int digito = 0, invertido = 0;
 	
     while (num != 0) {
         digito = num % 10;
@@ -388,7 +388,7 @@ int q5(int num)
 
 int q6(int numerobase, int numerobusca)
 {
-    int qtdOcorrencias;
+    int qtdOcorrencias = 0;
     char strBase[50], strBusca[20];
 
     
@@ -429,7 +429,7 @@ int q6(int numerobase, int numerobusca)
 
  int q7(char matriz[8][10], char palavra[5])
  {
-     	int achou;
+     	int achou = 0;
 	int dx[8] = {-1, -1, -1,  0, 0, 1, 1, 1};
 	int dy[8] = {-1,  0,  1, -1, 1, -1, 0, 1};
 
