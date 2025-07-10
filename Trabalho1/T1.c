@@ -92,81 +92,57 @@ int teste(int a)
     Não utilizar funções próprias de string (ex: strtok)   
     pode utilizar strlen para pegar o tamanho da string
  */
-int q1(char data[])
-{
-  int datavalida = 1;
 
-  //quebrar a string data em strings sDia, sMes, sAno
-	char sAno[5], sMes[3], sDia[3];
-	int ano, mes, dia, i = 0;
-    	int meses[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+int q1(char data[]) {
+    int datavalida = 1;
+    char sAno[5], sMes[3], sDia[3];
+    int i = 0;
     
+    // Extrai dia
+    while(data[i] != '/' && data[i] != '\0') {
+        if(i >= 2) { datavalida = 0; break; }
+        sDia[i] = data[i];
+        i++;
+    }
+    sDia[i] = '\0';
+    if(i == 0) datavalida = 0;
     
-    	for( int i = 0; i != '/'; i++){
-		sDia[i] = data [i];
-	} 
-
-	if(i == 1 || i == 2){
-		sDia[i] = '\0'; 
-	} 
-	else {
-		datavalida = 0; 
-	}
-
-	int j = i + 1;
-	i = 0;
-
-	for (; data[j] != '/'; j++){
-		sMes[i] = data[j];
-		i++;
-	}
-
-	if(i == 1 || i == 2){ 
-		sMes[i] = '\0';
-	}
-	else
-		datavalida = 0;
-  
-	
-
-	j = j + 1;
-	i = 0;
-	
-	for(; data[j] != '\0'; j++){
-	 	sAno[i] = data[j];
-	 	i++;
-	}
-
-	if(i == 2 || i == 4){ 
-		sAno[i] = '\0';
-	}
-	else 
-		datavalida = 0;
-	
-	dia = atoi(sDia);
-	mes = atoi(sMes);
-	ano = atoi(sAno); 
-
-	
-    	if(dia < 1 || dia > 31)
-    		datavalida = 0;
+    // Extrai mês
+    int j = i + 1;
+    i = 0;
+    while(data[j] != '/' && data[j] != '\0') {
+        if(i >= 2) { datavalida = 0; break; }
+        sMes[i] = data[j];
+        i++; j++;
+    }
+    sMes[i] = '\0';
+    if(i == 0) datavalida = 0;
     
-    	if(mes < 1 || mes > 12)
-    		datavalida = 0;
-
+    // Extrai ano
+    j = j + 1;
+    i = 0;
+    while(data[j] != '\0') {
+        if(i >= 4) { datavalida = 0; break; }
+        sAno[i] = data[j];
+        i++; j++;
+    }
+    sAno[i] = '\0';
+    if(i != 2 && i != 4) datavalida = 0;
     
-        if((((ano % 4 == 0) && (ano % 100 != 0))) || (ano % 400 == 0))
-            meses[1] = 29;
+    // Converte e valida
+    int dia = atoi(sDia);
+    int mes = atoi(sMes);
+    int ano = atoi(sAno);
     
-    	if(dia > meses[mes - 1])
-    		datavalida = 0;
-
-  //printf("%s\n", data);
-
-  if (datavalida)
-      return 1;
-  else
-      return 0;
+    if(dia < 1 || mes < 1 || mes > 12) datavalida = 0;
+    
+    int meses[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+    if((ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0))
+        meses[1] = 29;
+    
+    if(dia > meses[mes-1]) datavalida = 0;
+    
+    return datavalida;
 }
 
 
@@ -287,26 +263,23 @@ char remover_acento(unsigned char c) {
 }
     
 
-int q3(char *texto, char c, int isCaseSensitive){
-    int qtdOcorrencias = -1;
-    char caractere_texto, caractere_buscado;
-    int cont;
-	
-	for (cont = 0; texto[cont] != '\0'; cont++) {
-        caractere_texto = remover_acento((unsigned char)texto[cont]);
-        caractere_buscado = remover_acento((unsigned char)c);
-
-        if (isCaseSensitive == 0) {
-            caractere_texto = to_lower(caractere_texto);
-            caractere_buscado = to_lower(caractere_buscado);
+int q3(char *texto, char c, int isCaseSensitive) {
+    int qtdOcorrencias = 0;
+    
+    for(int i = 0; texto[i] != '\0'; i++) {
+        char textoChar = remover_acento(texto[i]);
+        char buscaChar = remover_acento(c);
+        
+        if(!isCaseSensitive) {
+            textoChar = to_lower(textoChar);
+            buscaChar = to_lower(buscaChar);
         }
-
-        if (caractere_texto == caractere_buscado) {
+        
+        if(textoChar == buscaChar) {
             qtdOcorrencias++;
         }
     }
-
-
+    
     return qtdOcorrencias;
 }
 
