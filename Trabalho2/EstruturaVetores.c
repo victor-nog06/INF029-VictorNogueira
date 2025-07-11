@@ -110,29 +110,36 @@ Rertono (int)
     SEM_ESTRUTURA_AUXILIAR - Não tem estrutura auxiliar
     POSICAO_INVALIDA - Posição inválida para estrutura auxiliar
 */
-int excluirNumeroDoFinaldaEstrutura(int posicao){
-    int retorno;
-    if(ehPosicaoValida(posicao) == SUCESSO){
-        posicao -= 1;
-        No *aux = vetorPrincipal[posicao]->prox;
-        No *ant = vetorPrincipal[posicao];
-        if(aux != NULL){
-            while(aux->prox != NULL){
-                ant = aux;
-                aux = aux->prox;
-            }
-            free(aux);
-            ant->prox = NULL;
-            vetorPrincipal[posicao]->QtdElementos--;
-            retorno = SUCESSO;
-        }
-        else
-            retorno = SEM_ESTRUTURA_AUXILIAR;
+int excluirNumeroDoFinaldaEstrutura(int posicao) {
+    if (!ehPosicaoValida(posicao))
+        return POSICAO_INVALIDA;
+
+    posicao--; // ajusta índice (1 a 10 → 0 a 9)
+
+    // Proteção: estrutura auxiliar não criada
+    if (vetorPrincipal[posicao] == NULL)
+        return SEM_ESTRUTURA_AUXILIAR;
+
+    // Proteção: lista encadeada vazia
+    if (vetorPrincipal[posicao]->prox == NULL)
+        return ESTRUTURA_AUXILIAR_VAZIA;
+
+    // Avança até o último nó
+    No *aux = vetorPrincipal[posicao]->prox;
+    No *ant = vetorPrincipal[posicao];
+
+    while (aux->prox != NULL) {
+        ant = aux;
+        aux = aux->prox;
     }
-    else
-        retorno = POSICAO_INVALIDA;
-    return retorno;
+
+    free(aux);
+    ant->prox = NULL;
+    vetorPrincipal[posicao]->QtdElementos--;
+
+    return SUCESSO;
 }
+
 
 /*
 Objetivo: excluir o numero 'valor' da estrutura auxiliar da posição 'posicao'.
@@ -147,46 +154,53 @@ Rertono (int)
     POSICAO_INVALIDA - Posição inválida para estrutura auxiliar
 
 */
-int excluirNumeroEspecificoDeEstrutura(int posicao, int valor){
+int excluirNumeroEspecificoDeEstrutura(int posicao, int valor) {
     int retorno;
-    if(ehPosicaoValida(posicao) == SUCESSO){
-        posicao--;
-        if(vetorPrincipal[posicao] != NULL && vetorPrincipal[posicao]->QtdElementos > 0){
-            No *apagar, *aux = vetorPrincipal[posicao]->prox;
-            while(aux->prox != NULL && aux->prox->conteudo != valor){
-                aux = aux->prox;
-            }
-            if(aux->prox->conteudo == valor){
-                if(aux->prox->prox != NULL){
-                    apagar = aux->prox;
-                    aux->prox = aux->prox->prox;
-                    free(apagar);
-                    apagar = NULL;
-                }
-                else{
-                    apagar = aux->prox;
-                    aux->prox = NULL;
-                    free(apagar);
-                    apagar = NULL;
-                }
-                vetorPrincipal[posicao]->QtdElementos--;
-                retorno = SUCESSO;
-            }
-            else{
-                retorno = NUMERO_INEXISTENTE;
-            }
-        }
-        else{
-            if(vetorPrincipal[posicao] == NULL)
-                retorno = SEM_ESTRUTURA_AUXILIAR;
-            if(vetorPrincipal[posicao]->QtdElementos <= 0)
-                retorno = ESTRUTURA_AUXILIAR_VAZIA;
-        }
+
+    if (!ehPosicaoValida(posicao)) {
+        return POSICAO_INVALIDA;
     }
-    else
-        retorno = POSICAO_INVALIDA;
+
+    posicao--;
+
+    if (vetorPrincipal[posicao] == NULL) {
+        return SEM_ESTRUTURA_AUXILIAR;
+    }
+
+    if (vetorPrincipal[posicao]->QtdElementos <= 0 || vetorPrincipal[posicao]->prox == NULL) {
+        return ESTRUTURA_AUXILIAR_VAZIA;
+    }
+
+    No *apagar, *aux = vetorPrincipal[posicao];
+
+    // Se o número a ser excluído estiver no primeiro nó da lista
+    if (aux->prox->conteudo == valor) {
+        apagar = aux->prox;
+        aux->prox = apagar->prox;
+        free(apagar);
+        vetorPrincipal[posicao]->QtdElementos--;
+        return SUCESSO;
+    }
+
+    // Busca o valor na lista
+    aux = vetorPrincipal[posicao]->prox;
+    while (aux->prox != NULL && aux->prox->conteudo != valor) {
+        aux = aux->prox;
+    }
+
+    if (aux->prox != NULL && aux->prox->conteudo == valor) {
+        apagar = aux->prox;
+        aux->prox = apagar->prox;
+        free(apagar);
+        vetorPrincipal[posicao]->QtdElementos--;
+        retorno = SUCESSO;
+    } else {
+        retorno = NUMERO_INEXISTENTE;
+    }
+
     return retorno;
 }
+
 
 // se posição é um valor válido {entre 1 e 10}
 int ehPosicaoValida(int posicao){
