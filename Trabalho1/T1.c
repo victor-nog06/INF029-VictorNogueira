@@ -95,54 +95,54 @@ int teste(int a)
 
 int q1(char data[]) {
     int datavalida = 1;
-    char sAno[5], sMes[3], sDia[3];
+    char sAno[5] = {0}, sMes[3] = {0}, sDia[3] = {0};  // Zera tudo
     int i = 0;
-    
+
     // Extrai dia
     while(data[i] != '/' && data[i] != '\0') {
-        if(i >= 2) { datavalida = 0; break; }
+        if(i >= 2) return 0;
         sDia[i] = data[i];
         i++;
     }
+    if(i == 0) return 0;
     sDia[i] = '\0';
-    if(i == 0) datavalida = 0;
-    
+
     // Extrai mês
     int j = i + 1;
     i = 0;
     while(data[j] != '/' && data[j] != '\0') {
-        if(i >= 2) { datavalida = 0; break; }
+        if(i >= 2) return 0;
         sMes[i] = data[j];
         i++; j++;
     }
+    if(i == 0) return 0;
     sMes[i] = '\0';
-    if(i == 0) datavalida = 0;
-    
+
     // Extrai ano
     j = j + 1;
     i = 0;
     while(data[j] != '\0') {
-        if(i >= 4) { datavalida = 0; break; }
+        if(i >= 4) return 0;
         sAno[i] = data[j];
         i++; j++;
     }
+    if(i != 2 && i != 4) return 0;
     sAno[i] = '\0';
-    if(i != 2 && i != 4) datavalida = 0;
-    
+
     // Converte e valida
     int dia = atoi(sDia);
     int mes = atoi(sMes);
     int ano = atoi(sAno);
-    
-    if(dia < 1 || mes < 1 || mes > 12) datavalida = 0;
-    
+
+    if(dia < 1 || mes < 1 || mes > 12) return 0;
+
     int meses[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
     if((ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0))
         meses[1] = 29;
-    
-    if(dia > meses[mes-1]) datavalida = 0;
-    
-    return datavalida;
+
+    if(dia > meses[mes-1]) return 0;
+
+    return 1;
 }
 
 
